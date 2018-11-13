@@ -1,25 +1,30 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import io from 'socket.io-client';
+import { API_URL } from './config';
+import OAuth from './OAuthPopup';
+import "./App.css";
+import "./bootstrap.min.css";
+
+const socket = io(API_URL)
+const providers = ['instagram']
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      instagramCode: ''
+    }
+  }
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      {providers.map(provider => 
+            <OAuth 
+              provider={provider}
+              key={provider}
+              socket={socket}
+            />
+          )}
       </div>
     );
   }
